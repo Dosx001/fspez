@@ -19,6 +19,10 @@
   },
   "devDependencies": {
     "@tauri-apps/cli": "^2.0.0-alpha.9",
+    "@typescript-eslint/eslint-plugin": "^6.6.0",
+    "@typescript-eslint/parser": "^6.6.0",
+    "eslint": "^8.48.0",
+    "eslint-plugin-solid": "^0.13.0",
     "internal-ip": "^7.0.0",
     "typescript": "^5.0.2",
     "vite": "^4.4.4",
