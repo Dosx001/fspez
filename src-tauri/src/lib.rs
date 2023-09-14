@@ -33,12 +33,29 @@ async fn token(id: String, secret: String) -> Value {
     Value::Null
 }
 
+#[tauri::command]
+async fn hot(token: String) -> Value {
+    let result = reqwest::Client::new()
+        .get("https://oauth.reddit.com/hot")
+        .header("Authorization", format!("bearer {}", token))
+        .header("User-Agent", "ChangeMeClient/0.1 by YourUsername")
+        .send()
+        .await;
+    match result {
+        Ok(response) => match response.json::<Value>().await {
+            Ok(value) => value,
+            Err(_) => Value::Null,
+        },
+        Err(_) => Value::Null,
+    }
+}
+
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
     tauri::Builder::default()
         .plugin(tauri_plugin_window::init())
         .plugin(tauri_plugin_shell::init())
-        .invoke_handler(tauri::generate_handler![token])
+        .invoke_handler(tauri::generate_handler![token, hot])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }
