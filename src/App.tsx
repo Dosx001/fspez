@@ -1,4 +1,5 @@
 import { invoke } from "@tauri-apps/api/tauri";
+import List from "components/List";
 import { useToken } from "context/token";
 
 function App() {
@@ -19,6 +20,7 @@ function App() {
       >
         token
       </button>
+      <List />
     </div>
   );
 }
