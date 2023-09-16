@@ -1,7 +1,14 @@
 /* @refresh reload */
+import { TokenProvider } from "context/token";
 import { render } from "solid-js/web";
-
-import "./styles.scss";
 import App from "./App";
+import "./styles.scss";
 
-render(() => <App />, document.getElementById("root") as HTMLElement);
+render(
+  () => (
+    <TokenProvider>
+      <App />
+    </TokenProvider>
+  ),
+  document.getElementById("root") as HTMLElement,
+);
