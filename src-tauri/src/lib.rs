@@ -34,6 +34,35 @@ async fn token(id: String, secret: String) -> Value {
 }
 
 #[tauri::command]
+async fn auth(id: String, secret: String, code: String) -> Value {
+    let result = reqwest::Client::new()
+        .post("https://www.reddit.com/api/v1/access_token")
+        .header("Content-Type", "application/x-www-form-urlencoded")
+        .header("User-Agent", "ChangeMeClient/0.1 by YourUsername")
+        .header(
+            "Authorization",
+            format!(
+                "Basic {}",
+                base64::engine::general_purpose::STANDARD
+                    .encode(format!("{}:{}", id, secret).as_bytes())
+            ),
+        )
+        .body(format!(
+            "grant_type=authorization_code&code={}&redirect_uri=http://localhost:1420",
+            code
+        ))
+        .send()
+        .await;
+    match result {
+        Ok(response) => match response.json::<Value>().await {
+            Ok(value) => value,
+            Err(_) => Value::Null,
+        },
+        Err(_) => Value::Null,
+    }
+}
+
+#[tauri::command]
 async fn hot(token: String) -> Value {
     let result = reqwest::Client::new()
         .get("https://oauth.reddit.com/hot")
@@ -55,7 +84,7 @@ pub fn run() {
     tauri::Builder::default()
         .plugin(tauri_plugin_window::init())
         .plugin(tauri_plugin_shell::init())
-        .invoke_handler(tauri::generate_handler![token, hot])
+        .invoke_handler(tauri::generate_handler![auth, hot, token])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }
