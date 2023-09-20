@@ -45,6 +45,7 @@ const List = () => {
     switch (post.data.thumbnail) {
       case "nsfw":
       case "default":
+      case "spoiler":
         url = post.data.preview.images[0].resolutions[0].url;
         break;
       default:
@@ -83,6 +84,9 @@ const List = () => {
             <Show when={post.data.thumbnail_width !== null}>
               <img
                 class="h-16 w-16 rounded object-cover"
+                style={{
+                  filter: post.data.spoiler ? "blur(4px)" : "",
+                  }}
                 src={thumbnail(post)}
               />
             </Show>
