@@ -18,7 +18,9 @@ interface Post {
     permalink: string;
     pinned: boolean;
     preview: {
-      images: { resolution: { height: number; url: string; width: number }[] };
+      images: {
+        resolutions: { height: number; url: string; width: number }[];
+      }[];
     };
     quarantine: boolean;
     saved: boolean;
@@ -38,11 +40,23 @@ interface Post {
 const List = () => {
   const token = useToken().token;
   const [posts, setPosts] = createSignal<Post[]>([]);
+  const thumbnail = (post: Post): string => {
+    let url: string;
+    switch (post.data.thumbnail) {
+      case "nsfw":
+      case "default":
+        url = post.data.preview.images[0].resolutions[0].url;
+        break;
+      default:
+        url = post.data.thumbnail;
+    }
+    return url.replaceAll("amp;", "");
+  };
   createEffect(
     on(token, () => {
       invoke("hot", { token: token() }).then((res) => {
         console.log(res);
-        setPosts(res.data.children);
+        setPosts((res as { data: { children: Post[] } }).data.children);
       })!;
     }),
   );
@@ -50,8 +64,8 @@ const List = () => {
     <div>
       <For each={posts()}>
         {(post) => (
-          <div class="flex">
-            <div class="w-full rounded border border-black">
+          <div class="flex border-t border-gray-800 p-1">
+            <div class="w-full">
               <p>{post.data.title ?? ""}</p>
               <div>
                 <a href="">{post.data.subreddit}</a>
@@ -66,11 +80,11 @@ const List = () => {
                 </Show>
               </div>
             </div>
-            <Show when={post.data.is_video}>
-              <img src={post.data.preview.images[0]!.url} />
-            </Show>
             <Show when={post.data.thumbnail_width !== null}>
-              <img src={post.data.thumbnail} />
+              <img
+                class="h-16 w-16 rounded object-cover"
+                src={thumbnail(post)}
+              />
             </Show>
           </div>
         )}
