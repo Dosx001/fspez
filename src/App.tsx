@@ -14,9 +14,7 @@ function App() {
     location.replace(
       `https://www.reddit.com/api/v1/authorize.compact?client_id=${
         import.meta.env.VITE_CLIENT_ID
-      }&response_type=code&state=${
-        import.meta.env.VITE_USERNAME
-      }&redirect_uri=http://localhost:1420&duration=permanent&scope=*`,
+      }&response_type=code&state=200&redirect_uri=http://localhost:1420&duration=permanent&scope=*`,
     );
   };
   const init = async () => {
