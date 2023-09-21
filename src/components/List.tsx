@@ -53,6 +53,24 @@ const List = () => {
     }
     return url.replaceAll("amp;", "");
   };
+  const formatTime = (time: number, units: Intl.RelativeTimeFormatUnit) => {
+    const parts = new Intl.RelativeTimeFormat("en", {
+      style: "narrow",
+    }).formatToParts(Math.floor(time), units);
+    return `${parts[1].value}${parts[2].value}`;
+  };
+  const convertEpoch = (epoch: number) => {
+    const time =
+      (new Date().getTime() - new Date(epoch * 1000).getTime()) / 1000;
+    if (time === 1) return "Just now";
+    if (time < 60) return formatTime(time, "seconds");
+    if (time < 3600) return formatTime(time / 60, "minutes");
+    if (time < 86400) return formatTime(time / 3600, "hours");
+    if (time < 604800) return formatTime(time / 86400, "days");
+    if (time < 2419200) return formatTime(time / 604800, "weeks");
+    if (time < 29030400) return formatTime(time / 2419200, "months");
+    return formatTime(time / 29030400, "years");
+  };
   createEffect(
     on(token, () => {
       invoke("hot", { token: token() }).then((res) => {
@@ -70,6 +88,7 @@ const List = () => {
               <p>{post.data.title ?? ""}</p>
               <div>
                 <a href="">{post.data.subreddit}</a>
+                <span> {convertEpoch(post.data.created)}</span>
               </div>
               <div>
                 <span>{post.data.ups} </span>
@@ -86,7 +105,7 @@ const List = () => {
                 class="h-16 w-16 rounded object-cover"
                 style={{
                   filter: post.data.spoiler ? "blur(4px)" : "",
-                  }}
+                }}
                 src={thumbnail(post)}
               />
             </Show>
