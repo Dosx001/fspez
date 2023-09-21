@@ -91,9 +91,10 @@ const List = () => {
                 <span> {convertEpoch(post.data.created)}</span>
               </div>
               <div>
-                <span>{post.data.ups} </span>
-                <span>{post.data.num_comments} comments </span>
+                <span>{post.data.ups}</span>
+                <span> {post.data.num_comments} comments</span>
                 <Show when={post.data.over_18}>
+                  {" "}
                   <span class="rounded bg-red-600 px-1 font-bold text-white">
                     NSFW
                   </span>
