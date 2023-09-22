@@ -1,14 +1,14 @@
 [package]
-name = "fspez"
+name = "rocket"
 version = "0.0.0"
-description = "A Tauri App"
+description = "3rd party Reddit app"
 authors = ["you"]
 license = ""
 repository = ""
 edition = "2021"
 
 [lib]
-name = "fspez_lib"
+name = "rocket_lib"
 crate-type = ["staticlib", "cdylib", "rlib"]
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html

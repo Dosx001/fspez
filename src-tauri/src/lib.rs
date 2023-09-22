@@ -15,7 +15,7 @@ async fn token(id: String, secret: String) -> Value {
             ),
         )
         .header("Content-Type", "application/x-www-form-urlencoded")
-        .header("User-Agent", "ChangeMeClient/0.1 by YourUsername")
+        .header("User-Agent", "Rocket/1.0 by Dosx001")
         .body("grant_type=client_credentials")
         .send()
         .await;
@@ -38,7 +38,7 @@ async fn auth(id: String, secret: String, code: String) -> Value {
     let result = reqwest::Client::new()
         .post("https://www.reddit.com/api/v1/access_token")
         .header("Content-Type", "application/x-www-form-urlencoded")
-        .header("User-Agent", "ChangeMeClient/0.1 by YourUsername")
+        .header("User-Agent", "Rocket/1.0 by Dosx001")
         .header(
             "Authorization",
             format!(
@@ -67,7 +67,7 @@ async fn hot(token: String) -> Value {
     let result = reqwest::Client::new()
         .get("https://oauth.reddit.com/hot")
         .header("Authorization", format!("bearer {}", token))
-        .header("User-Agent", "ChangeMeClient/0.1 by YourUsername")
+        .header("User-Agent", "Rocket/1.0 by Dosx001")
         .send()
         .await;
     match result {

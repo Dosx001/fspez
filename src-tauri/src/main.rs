@@ -3,5 +3,5 @@
 
 fn main() {
     #[cfg(desktop)]
-    fspez_lib::run();
+    rocket_lib::run();
 }
