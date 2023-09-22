@@ -12,6 +12,7 @@ interface Post {
     is_video: boolean;
     link_flair_background_color: string;
     link_flair_text: string;
+    link_flair_text_color: string;
     locked: boolean;
     num_comments: number;
     over_18: boolean;
@@ -88,6 +89,21 @@ const List = () => {
               <p>{post.data.title ?? ""}</p>
               <div>
                 <a href="">{post.data.subreddit}</a>
+                <Show when={post.data.link_flair_text}>
+                  <span
+                    class="ml-1 px-1"
+                    style={{
+                      background: `${post.data.link_flair_background_color}`,
+                      color: `${
+                        post.data.link_flair_text_color === "light"
+                          ? "white"
+                          : "black"
+                      }`,
+                    }}
+                  >
+                    {post.data.link_flair_text?.replace(/:\w+:\s?/g, "")}
+                  </span>
+                </Show>
                 <span> {convertEpoch(post.data.created)}</span>
               </div>
               <div>
