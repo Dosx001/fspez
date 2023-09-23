@@ -1,3 +1,4 @@
+import { createVisibilityObserver } from "@solid-primitives/intersection-observer";
 import { invoke } from "@tauri-apps/api/tauri";
 import { useToken } from "context/token";
 import { For, Show, createEffect, createSignal, on } from "solid-js";
@@ -44,6 +45,10 @@ interface Post {
   };
 }
 
+interface Posts {
+  data: { children: Post[] };
+}
+
 const List = () => {
   const token = useToken().token;
   const [posts, setPosts] = createSignal<Post[]>([]);
@@ -85,12 +90,25 @@ const List = () => {
   };
   createEffect(
     on(token, () => {
-      invoke("hot", { token: token() }).then((res) => {
+      invoke("hot", { token: token(), after: "" }).then((res) => {
         console.log(res);
-        setPosts((res as { data: { children: Post[] } }).data.children);
+        setPosts((res as Posts).data.children);
       })!;
     }),
   );
+  let loader!: HTMLDivElement;
+  const loading = createVisibilityObserver({ rootMargin: "100px 0px" })(
+    () => loader,
+  );
+  createEffect(() => {
+    if (!loading()) return;
+    invoke("hot", {
+      token: token(),
+      after: posts()[posts().length - 1].data.name,
+    }).then((res) => {
+      setPosts((prev) => prev.concat((res as Posts).data.children));
+    })!;
+  });
   return (
     <div>
       <For each={posts()}>
@@ -151,6 +169,7 @@ const List = () => {
           </div>
         )}
       </For>
+      <div ref={loader} />
     </div>
   );
 };

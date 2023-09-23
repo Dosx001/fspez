@@ -63,9 +63,9 @@ async fn auth(id: String, secret: String, code: String) -> Value {
 }
 
 #[tauri::command]
-async fn hot(token: String) -> Value {
+async fn hot(token: String, after: String) -> Value {
     let result = reqwest::Client::new()
-        .get("https://oauth.reddit.com/hot")
+        .get(format!("https://oauth.reddit.com/hot/?after={}", after))
         .header("Authorization", format!("bearer {}", token))
         .header("User-Agent", "Rocket/1.0 by Dosx001")
         .send()
