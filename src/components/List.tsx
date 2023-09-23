@@ -169,7 +169,10 @@ const List = () => {
           </div>
         )}
       </For>
-      <div ref={loader} />
+      <div
+        ref={loader}
+        class="m-auto w-1/2 animate-ping border-y border-red-600"
+      />
     </div>
   );
 };
