@@ -97,7 +97,9 @@ const List = () => {
                   <span
                     class="ml-1 px-1"
                     style={{
-                      background: `${post.data.link_flair_background_color}`,
+                      background: `${
+                        post.data.link_flair_background_color || "darkgray"
+                      }`,
                       color: `${
                         post.data.link_flair_text_color === "light"
                           ? "white"
