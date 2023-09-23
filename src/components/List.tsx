@@ -90,6 +90,9 @@ const List = () => {
               <p>{post.data.title ?? ""}</p>
               <div>
                 <a href="">{post.data.subreddit}</a>
+                <Show when={post.data.locked}>
+                  <span class="ml-1">🔒</span>
+                </Show>
                 <Show when={post.data.link_flair_text}>
                   <span
                     class="ml-1 px-1"
