@@ -47,6 +47,7 @@ const List = () => {
       case "nsfw":
       case "default":
       case "spoiler":
+      case "image":
         url = post.data.preview.images[0].resolutions[0].url;
         break;
       default:
