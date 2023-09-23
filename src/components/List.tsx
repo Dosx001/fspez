@@ -102,7 +102,7 @@ const List = () => {
                       }`,
                     }}
                   >
-                    {post.data.link_flair_text?.replace(/:\w+:\s?/g, "")}
+                    {post.data.link_flair_text?.replace(/:\w+:\s?|amp;/g, "")}
                   </span>
                 </Show>
                 <span> {convertEpoch(post.data.created)}</span>
