@@ -14,6 +14,12 @@ interface Post {
     link_flair_text: string;
     link_flair_text_color: string;
     locked: boolean;
+    media_metadata: {
+      [key: string]: {
+        p: { u: string; h: number; w: number }[];
+      };
+    };
+    name: string;
     num_comments: number;
     over_18: boolean;
     permalink: string;
@@ -48,7 +54,11 @@ const List = () => {
       case "default":
       case "spoiler":
       case "image":
-        url = post.data.preview.images[0].resolutions[0].url;
+        try {
+          url = post.data.preview.images[0].resolutions[0].url;
+        } catch {
+          url = Object.values(post.data.media_metadata)[0].p[0].u;
+        }
         break;
       default:
         url = post.data.thumbnail;
