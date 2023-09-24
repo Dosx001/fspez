@@ -114,8 +114,8 @@ const List = () => {
       <For each={posts()}>
         {(post) => (
           <div class="flex border-t border-gray-800 p-1">
-            <div class="w-full">
-              <p>{post.data.title ?? ""}</p>
+            <div class="w-full text-sm">
+              <h1 class="text-base">{post.data.title ?? ""}</h1>
               <div>
                 <a href="">{post.data.subreddit}</a>
                 <Show when={post.data.locked}>
