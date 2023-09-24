@@ -8,7 +8,9 @@
     "dev": "vite",
     "build": "vite build",
     "serve": "vite preview",
-    "tauri": "tauri"
+    "tauri": "tauri",
+    "android:build": "source ./setupenv && tauri android build",
+    "android:dev": "source ./setupenv && tauri android dev"
   },
   "license": "MIT",
   "dependencies": {
