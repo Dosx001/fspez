@@ -1,5 +1,6 @@
 import { invoke } from "@tauri-apps/api/tauri";
 import List from "components/List";
+import MenuBar from "components/MenuBar";
 import { useToken } from "context/token";
 
 interface Token {
@@ -49,6 +50,7 @@ function App() {
   return (
     <div>
       <button onClick={auth}>Login</button>
+      <MenuBar />
       <List />
     </div>
   );
