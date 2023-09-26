@@ -79,12 +79,34 @@ async fn token(id: String, secret: String) -> Value {
     Value::Null
 }
 
+#[tauri::command]
+async fn subreddits_popluar(token: String) -> Value {
+    let result = reqwest::Client::new()
+        .get("https://oauth.reddit.com/subreddits/popular?limit=15&after=t5_2qs0k")
+        .header("Authorization", format!("bearer {}", token))
+        .header("User-Agent", "Rocket/1.0 by Dosx001")
+        .send()
+        .await;
+    match result {
+        Ok(response) => match response.json::<Value>().await {
+            Ok(value) => value,
+            Err(_) => Value::Null,
+        },
+        Err(_) => Value::Null,
+    }
+}
+
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
     tauri::Builder::default()
         .plugin(tauri_plugin_window::init())
         .plugin(tauri_plugin_shell::init())
-        .invoke_handler(tauri::generate_handler![auth, hot, token])
+        .invoke_handler(tauri::generate_handler![
+            auth,
+            hot,
+            token,
+            subreddits_popluar
+        ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }

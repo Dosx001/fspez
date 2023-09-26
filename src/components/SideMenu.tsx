@@ -1,6 +1,30 @@
+import { invoke } from "@tauri-apps/api";
+import { useToken } from "context/token";
 import type { Setter } from "solid-js";
+import { createEffect, createSignal, For, on, Show } from "solid-js";
+
+interface SubReddit {
+  data: {
+    display_name: string;
+    icon_img: string;
+  };
+}
+
+interface SubReddits {
+  data: { children: SubReddit[] };
+}
 
 const SideMenu = (props: { setShowMenu: Setter<boolean> }) => {
+  const token = useToken().token;
+  const [subs, setSubs] = createSignal<SubReddit[]>();
+  createEffect(
+    on(token, () => {
+      invoke("subreddits_popluar", { token: token() }).then((res) => {
+        console.log(res);
+        setSubs((res as SubReddits).data.children);
+      })!;
+    }),
+  );
   return (
     <div class="fixed top-0 m-0 ml-[25%] h-full w-3/4 overflow-y-scroll bg-black fill-white text-white">
       <button
@@ -80,6 +104,30 @@ const SideMenu = (props: { setShowMenu: Setter<boolean> }) => {
         </svg>
         <p>Home</p>
       </button>
+      <hr class="border-gray-800" />
+      <For each={subs()}>
+        {(sub) => (
+          <button
+            class="flex w-full py-2 hover:bg-gray-900"
+            onClick={() => {
+              props.setShowMenu(false);
+            }}
+          >
+            <Show
+              when={sub.data.icon_img}
+              fallback={
+                <p class="mx-2 w-6 rounded-full bg-red-600 font-bold">r</p>
+              }
+            >
+              <img
+                class="mx-2 h-6 w-6 rounded-full object-cover"
+                src={sub.data.icon_img}
+              />
+            </Show>
+            <p>{sub.data.display_name}</p>
+          </button>
+        )}
+      </For>
     </div>
   );
 };
