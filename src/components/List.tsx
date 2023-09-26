@@ -9,6 +9,7 @@ interface Post {
     domain: string;
     gallery_data?: { id: string; media_id: string }[];
     is_gallery: boolean;
+    is_reddit_media_domain: boolean;
     is_self: boolean;
     is_video: boolean;
     link_flair_background_color: string;
@@ -135,6 +136,15 @@ const List = () => {
                   >
                     {post.data.link_flair_text?.replace(/:\w+:\s?|amp;/g, "")}
                   </span>
+                </Show>
+                <Show
+                  when={
+                    post.data.domain &&
+                    !post.data.is_self &&
+                    !post.data.is_reddit_media_domain
+                  }
+                >
+                  <span class="ml-1">{post.data.domain}</span>
                 </Show>
                 <span> {convertEpoch(post.data.created)}</span>
               </div>
